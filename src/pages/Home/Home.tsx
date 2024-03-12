@@ -11,6 +11,7 @@ import { useConfig } from 'config/config'
 import { Button, Container, Form, Modal } from 'react-bootstrap'
 import { useTranslation } from 'react-i18next'
 import { LuCalendarPlus } from 'react-icons/lu'
+import { useHolidayPlanner } from 'stores/HolidayContext'
 
 import Box from 'components/Box'
 import Header from 'components/Header'
@@ -29,6 +30,7 @@ const Home: React.FC = () => {
   const { app } = useConfig()
   const { t, i18n } = useTranslation()
   const setTitle = useTitle()
+  const { holidayPlanners, isLoading } = useHolidayPlanner()
 
   const handleChange = useCallback(
     (
@@ -92,6 +94,18 @@ const Home: React.FC = () => {
             />{' '}
             Create a new Holiday Planner
           </Button>
+
+          {isLoading && <p>Loading...</p>}
+          {!isLoading &&
+            holidayPlanners.length > 0 &&
+            holidayPlanners.map((item) => (
+              <div key={item.id}>
+                <p>{item.title}</p>
+                <p>{item.description}</p>
+                <p>{item.date}</p>
+                {item.participants.join(', ')}
+              </div>
+            ))}
         </Container>
       </main>
 

@@ -1,0 +1,6 @@
+{
+  "posts": [
+    { "id": 1, "title": "Post 1", "description": "Description of post 1", "date": "2024-03-16", "location": "NY", "participants": ["Participant 1", "Participant 2"] },
+    { "id": 2, "title": "Post 2", "description": "Description of post 2", "date": "2024-07-26", "location": "HK", "participants": ["Participant 1", "Participant 2"] }
+  ]
+}
