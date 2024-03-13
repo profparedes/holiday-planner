@@ -1,80 +1,72 @@
-import {
-  ChangeEvent,
-  FormEvent,
-  memo,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 
-import { useConfig } from 'config/config'
-import { Button, Container, Form, Modal } from 'react-bootstrap'
+import { Button, Card, Col, Container, Modal, Row } from 'react-bootstrap'
 import { useTranslation } from 'react-i18next'
 import { LuCalendarPlus } from 'react-icons/lu'
 import { useHolidayPlanner } from 'stores/HolidayContext'
 
 import Box from 'components/Box'
 import Header from 'components/Header'
+import HolidayPlannerFormModal from 'components/HolidayPlannerFormModal'
+import { FormDataType } from 'components/HolidayPlannerFormModal/HolidayPlannerFormModal'
 
 import useTitle from 'hooks/useTitle'
 
+import { HolidayPlannerType } from 'types/HolidayPlannerType'
+
 const Home: React.FC = () => {
   const [modalShow, setModalShow] = useState(false)
-  const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    date: '',
-    location: '',
-    participants: [''],
-  })
-  const { app } = useConfig()
+  const [deleteConfirmModal, setDeleteConfirmModal] = useState(false)
+  const [currentHolidayPlanner, setCurrentHolidayPlanner] =
+    useState<HolidayPlannerType | null>(null)
+
   const { t, i18n } = useTranslation()
   const setTitle = useTitle()
-  const { holidayPlanners, isLoading } = useHolidayPlanner()
+  const {
+    holidayPlanners,
+    isLoading,
+    createHolidayPlanner,
+    updateHolidayPlanner,
+    deleteHolidayPlanner,
+  } = useHolidayPlanner()
 
-  const handleChange = useCallback(
-    (
-      e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-      index?: number,
-    ) => {
-      const { name, value } = e.target
-      if (name === 'participants') {
-        const updatedParticipants = [...formData.participants]
-        if (index !== undefined) {
-          updatedParticipants[index] = value
-        } else {
-          updatedParticipants.push(value)
-        }
-        setFormData((prevState) => ({
-          ...prevState,
-          participants: updatedParticipants,
-        }))
+  const handleSubmitHolidayPlanner = useCallback(
+    (formData: FormDataType) => {
+      if (!currentHolidayPlanner) {
+        createHolidayPlanner(formData)
+        setModalShow(false)
       } else {
-        setFormData((prevState) => ({
-          ...prevState,
-          [name]: value,
-        }))
+        updateHolidayPlanner(currentHolidayPlanner.id, formData)
+        setModalShow(false)
+        setCurrentHolidayPlanner(null)
       }
     },
-    [formData.participants],
+    [createHolidayPlanner, currentHolidayPlanner, updateHolidayPlanner],
   )
 
-  const handleAddParticipant = useCallback(() => {
-    setFormData((prevState) => ({
-      ...prevState,
-      participants: [...formData.participants, ''],
-    }))
-  }, [formData.participants])
-
-  const handleSubmit = useCallback(
-    (e: FormEvent<HTMLFormElement>) => {
-      e.preventDefault()
-
-      console.log({ formData })
-      setModalShow(false)
+  const handleEditHolidayPlanner = useCallback(
+    (holidayPlanner: HolidayPlannerType) => {
+      setCurrentHolidayPlanner(holidayPlanner)
+      setModalShow(true)
     },
-    [formData],
+    [],
   )
+
+  const handleOpenDeleteHolidayPlannerModal = useCallback(
+    (holidayPlanner: HolidayPlannerType) => {
+      setCurrentHolidayPlanner(holidayPlanner)
+      setDeleteConfirmModal(true)
+    },
+    [],
+  )
+
+  const handleDeleteHolidayPlanner = useCallback(() => {
+    if (currentHolidayPlanner) {
+      deleteHolidayPlanner(currentHolidayPlanner?.id)
+      setDeleteConfirmModal(false)
+      setCurrentHolidayPlanner(null)
+    }
+  }, [currentHolidayPlanner, deleteHolidayPlanner])
 
   useEffect(() => {
     setTitle(t('home.head-title'))
@@ -94,115 +86,74 @@ const Home: React.FC = () => {
             />{' '}
             Create a new Holiday Planner
           </Button>
-
           {isLoading && <p>Loading...</p>}
-          {!isLoading &&
-            holidayPlanners.length > 0 &&
-            holidayPlanners.map((item) => (
-              <div key={item.id}>
-                <p>{item.title}</p>
-                <p>{item.description}</p>
-                <p>{item.date}</p>
-                {item.participants.join(', ')}
-              </div>
-            ))}
+          <Row style={{ marginTop: 12 }}>
+            {!isLoading &&
+              holidayPlanners.length > 0 &&
+              holidayPlanners.map((item) => (
+                <Col key={item.id}>
+                  <Card>
+                    <Card.Body>
+                      <Card.Title>{item.title}</Card.Title>
+                      <Card.Text>
+                        {item.description}
+                        <Box direction="row">
+                          <p>{item.date}</p>
+                          <p>{item.participants.join(', ')}</p>
+                        </Box>
+                        <Box
+                          direction="row"
+                          justifyContent="space-between"
+                          marginTop={8}
+                        >
+                          <Button
+                            onClick={() => handleEditHolidayPlanner(item)}
+                          >
+                            Edit
+                          </Button>
+                          <Button
+                            onClick={() =>
+                              handleOpenDeleteHolidayPlannerModal(item)
+                            }
+                          >
+                            Delete
+                          </Button>
+                        </Box>
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))}
+          </Row>
         </Container>
       </main>
 
+      <HolidayPlannerFormModal
+        showModal={modalShow}
+        onHideModal={() => setModalShow(false)}
+        onSubmit={handleSubmitHolidayPlanner}
+        currentHolidayPlanner={currentHolidayPlanner ?? undefined}
+      />
+
       <Modal
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
+        size="sm"
         centered
+        show={deleteConfirmModal}
+        onHide={() => setDeleteConfirmModal(false)}
       >
         <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
-            Create a new Holiday Planner
-          </Modal.Title>
+          <Modal.Title>Delete Holiday Planner</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="formTitle">
-              <Form.Label>Title</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter title"
-                name="title"
-                value={formData.title}
-                onChange={handleChange}
-              />
-            </Form.Group>
-            <Form.Group controlId="formDescription">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                placeholder="Enter description"
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-              />
-            </Form.Group>
-            <Form.Group controlId="formDate">
-              <Form.Label>Date</Form.Label>
-              <Form.Control
-                type="date"
-                placeholder="Enter date"
-                name="date"
-                value={formData.date}
-                onChange={handleChange}
-              />
-            </Form.Group>
-            <Form.Group controlId="formLocation">
-              <Form.Label>Location</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter location"
-                name="location"
-                value={formData.location}
-                onChange={handleChange}
-              />
-            </Form.Group>
-            <Form.Group controlId="formParticipants">
-              <Form.Label>Participants</Form.Label>
-              {formData.participants.map((participant, index) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <Box direction="row" key={index}>
-                  <Form.Control
-                    type="text"
-                    placeholder="Enter participant"
-                    name="participants"
-                    value={participant}
-                    onChange={(e) => handleChange(e, index)}
-                  />
-                  {index === formData.participants.length - 1 && (
-                    <Button variant="secondary" onClick={handleAddParticipant}>
-                      +
-                    </Button>
-                  )}
-                </Box>
-              ))}
-            </Form.Group>
-            <Box
-              width="100%"
-              direction="row"
-              justifyContent="flex-end"
-              marginTop={12}
-            >
-              <Button variant="primary" type="submit">
-                Save
-              </Button>
-            </Box>
-          </Form>
+          <p>
+            {`Are you sure you want to delete the holiday planner: ${currentHolidayPlanner?.title}`}
+          </p>
         </Modal.Body>
         <Modal.Footer>
-          <Box width="100%" direction="row" justifyContent="flex-start">
-            <Button onClick={() => setModalShow(false)}>Cancel</Button>
-          </Box>
+          <Button onClick={() => setDeleteConfirmModal(false)}>Cancel</Button>
+          <Button onClick={handleDeleteHolidayPlanner}>Delete</Button>
         </Modal.Footer>
       </Modal>
-      <p>{`v${app.version}`}</p>
     </>
   )
 }
