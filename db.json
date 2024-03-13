@@ -6,10 +6,7 @@
       "description": "Description of post 1",
       "date": "2024-03-16",
       "location": "NY",
-      "participants": [
-        "Participant 1",
-        "Participant 2"
-      ]
+      "participants": ["Participant 1", "Participant 2"]
     },
     {
       "id": "2",
@@ -17,10 +14,7 @@
       "description": "Description of post 2",
       "date": "2024-07-26",
       "location": "HK",
-      "participants": [
-        "Participant 1",
-        "Participant 2"
-      ]
+      "participants": ["Participant 1", "Participant 2"]
     },
     {
       "id": "7b4e",
@@ -28,22 +22,14 @@
       "description": "Description of post 3",
       "date": "2025-02-17",
       "location": "Brazil",
-      "participants": [
-        "Participant 1",
-        "Participant 2",
-        "text"
-      ]
+      "participants": ["Participant 1", "Participant 2", "text"]
     },
     {
       "title": "NEW 123",
       "description": "12341243",
       "date": "2024-03-16",
       "location": "12341241241234",
-      "participants": [
-        "234",
-        "124124",
-        "12341241243"
-      ],
+      "participants": ["234", "124124", "12341241243"],
       "id": "243c"
     }
   ]
