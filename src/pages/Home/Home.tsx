@@ -99,7 +99,7 @@ const Home: React.FC = () => {
             participants: [''],
           }
         : {
-            title: currentHolidayPlanner.title || '',
+            title: currentHolidayPlanner.title || 'PPPP',
             description: currentHolidayPlanner.description || '',
             startDate: currentHolidayPlanner.startDate || '',
             endDate: currentHolidayPlanner.endDate || '',

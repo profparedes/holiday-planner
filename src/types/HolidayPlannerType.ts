@@ -4,6 +4,6 @@ export type HolidayPlannerType = {
   description: string
   location: string
   startDate: string
-endDate: string
+  endDate: string
   participants: string[]
 }

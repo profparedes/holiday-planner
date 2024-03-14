@@ -48,6 +48,7 @@ const HolidayPlannerFormModal: React.FC<IHolidayPlannerFormModalProps> = ({
   initialFormData,
 }) => {
   const [formData, setFormData] = useState<FormDataType>(initialFormData)
+  useEffect(() => setFormData(initialFormData), [initialFormData])
 
   const handleChange = useCallback(
     (
@@ -101,16 +102,27 @@ const HolidayPlannerFormModal: React.FC<IHolidayPlannerFormModalProps> = ({
 
   useEffect(() => {
     if (!showModal) {
-      setFormData({
-        title: '',
-        description: '',
-        startDate: '',
-        endDate: '',
-        location: '',
-        participants: [''],
-      })
+      if (currentHolidayPlanner) {
+        setFormData({
+          title: currentHolidayPlanner.title || '',
+          description: currentHolidayPlanner.description || '',
+          startDate: currentHolidayPlanner.startDate || '',
+          endDate: currentHolidayPlanner.endDate || '',
+          location: currentHolidayPlanner.location || '',
+          participants: currentHolidayPlanner.participants || [''],
+        })
+      } else {
+        setFormData({
+          title: '',
+          description: '',
+          startDate: '',
+          endDate: '',
+          location: '',
+          participants: [''],
+        })
+      }
     }
-  }, [showModal])
+  }, [currentHolidayPlanner, showModal])
 
   return (
     <Dialog open={showModal} onClose={onHideModal} fullWidth maxWidth="md">
@@ -128,7 +140,7 @@ const HolidayPlannerFormModal: React.FC<IHolidayPlannerFormModalProps> = ({
                 <OutlinedInput
                   id="title"
                   name="title"
-                  value={formData.title}
+                  value={currentHolidayPlanner?.title ?? formData.title}
                   onChange={handleChange}
                   label="Title"
                 />
@@ -141,7 +153,9 @@ const HolidayPlannerFormModal: React.FC<IHolidayPlannerFormModalProps> = ({
                   fullWidth
                   id="description"
                   name="description"
-                  value={formData.description}
+                  value={
+                    currentHolidayPlanner?.description ?? formData.description
+                  }
                   onChange={handleChange}
                   label="Description"
                   multiline
@@ -156,7 +170,7 @@ const HolidayPlannerFormModal: React.FC<IHolidayPlannerFormModalProps> = ({
                   id="startDate"
                   name="startDate"
                   type="date"
-                  value={formData.startDate}
+                  value={currentHolidayPlanner?.startDate ?? formData.startDate}
                   onChange={handleChange}
                   label="Start Date"
                   sx={{
@@ -173,7 +187,7 @@ const HolidayPlannerFormModal: React.FC<IHolidayPlannerFormModalProps> = ({
                   id="endDate"
                   name="endDate"
                   type="date"
-                  value={formData.endDate}
+                  value={currentHolidayPlanner?.endDate ?? formData.endDate}
                   onChange={handleChange}
                   label="End Date"
                   sx={{
@@ -189,7 +203,7 @@ const HolidayPlannerFormModal: React.FC<IHolidayPlannerFormModalProps> = ({
                 <OutlinedInput
                   id="location"
                   name="location"
-                  value={formData.location}
+                  value={currentHolidayPlanner?.location ?? formData.location}
                   onChange={handleChange}
                   label="Location"
                 />
