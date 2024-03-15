@@ -7,11 +7,7 @@
       "location": "XYZ Convention Center",
       "startDate": "2024-04-20",
       "endDate": "2024-04-20",
-      "participants": [
-        "Ana Silva",
-        "João Oliveira",
-        "Mariana Souza"
-      ]
+      "participants": ["Ana Silva", "João Oliveira", "Mariana Souza"]
     },
     {
       "title": "Professional Development Workshop",
@@ -19,10 +15,7 @@
       "startDate": "2024-05-10",
       "endDate": "2024-05-10",
       "location": "ABC Company Auditorium",
-      "participants": [
-        "Carlos Santos",
-        "Pedro Lima"
-      ],
+      "participants": ["Carlos Santos", "Pedro Lima"],
       "id": "2"
     },
     {
@@ -32,11 +25,7 @@
       "location": "XYZ Events Center",
       "startDate": "2024-06-15",
       "endDate": "2024-06-17",
-      "participants": [
-        "Fernanda Oliveira",
-        "Rafael Silva",
-        "Camila Pereira"
-      ]
+      "participants": ["Fernanda Oliveira", "Rafael Silva", "Camila Pereira"]
     },
     {
       "id": "4",
@@ -45,11 +34,7 @@
       "location": "XYZ Company Training Room",
       "startDate": "2024-07-05",
       "endDate": "2024-07-05",
-      "participants": [
-        "Lucas Almeida",
-        "Isabela Santos",
-        "Renata Costa"
-      ]
+      "participants": ["Lucas Almeida", "Isabela Santos", "Renata Costa"]
     }
   ]
 }
