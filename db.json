@@ -2,35 +2,54 @@
   "posts": [
     {
       "id": "1",
-      "title": "Post 1",
-      "description": "Description of post 1",
-      "date": "2024-03-16",
-      "location": "NY",
-      "participants": ["Participant 1", "Participant 2"]
+      "title": "Product Launch Event",
+      "description": "Come and get a first look at our latest launch! It will be an afternoon filled with presentations, demonstrations, and networking.",
+      "location": "XYZ Convention Center",
+      "startDate": "2024-04-20",
+      "endDate": "2024-04-20",
+      "participants": [
+        "Ana Silva",
+        "João Oliveira",
+        "Mariana Souza"
+      ]
     },
     {
-      "id": "2",
-      "title": "Post 2",
-      "description": "Description of post 2",
-      "date": "2024-07-26",
-      "location": "HK",
-      "participants": ["Participant 1", "Participant 2"]
+      "title": "Professional Development Workshop",
+      "description": "Learn essential skills to boost your career in this interactive and practical workshop.",
+      "startDate": "2024-05-10",
+      "endDate": "2024-05-10",
+      "location": "ABC Company Auditorium",
+      "participants": [
+        "Carlos Santos",
+        "Pedro Lima"
+      ],
+      "id": "2"
     },
     {
-      "id": "7b4e",
-      "title": "Post 555",
-      "description": "Description of post 3",
-      "date": "2025-02-17",
-      "location": "Brazil",
-      "participants": ["Participant 1", "Participant 2", "text"]
+      "id": "3",
+      "title": "Technology and Innovation Conference",
+      "description": "Join this conference to stay up-to-date with the latest trends in technology and innovation.",
+      "location": "XYZ Events Center",
+      "startDate": "2024-06-15",
+      "endDate": "2024-06-17",
+      "participants": [
+        "Fernanda Oliveira",
+        "Rafael Silva",
+        "Camila Pereira"
+      ]
     },
     {
-      "title": "NEW 123",
-      "description": "12341243",
-      "date": "2024-03-16",
-      "location": "12341241241234",
-      "participants": ["234", "124124", "12341241243"],
-      "id": "243c"
+      "id": "4",
+      "title": "Workplace Mental Health Seminar",
+      "description": "Discuss strategies to promote mental health in the workplace and reduce stress.",
+      "location": "XYZ Company Training Room",
+      "startDate": "2024-07-05",
+      "endDate": "2024-07-05",
+      "participants": [
+        "Lucas Almeida",
+        "Isabela Santos",
+        "Renata Costa"
+      ]
     }
   ]
 }

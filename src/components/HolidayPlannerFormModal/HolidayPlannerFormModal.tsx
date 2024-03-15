@@ -20,6 +20,7 @@ import {
   OutlinedInput,
   Typography,
 } from '@mui/material'
+import { CiCirclePlus, CiCircleMinus } from 'react-icons/ci'
 
 import { HolidayPlannerType } from 'types/HolidayPlannerType'
 
@@ -126,55 +127,62 @@ const HolidayPlannerFormModal: React.FC<IHolidayPlannerFormModalProps> = ({
 
   return (
     <Dialog open={showModal} onClose={onHideModal} fullWidth maxWidth="md">
-      <DialogTitle>
+      <DialogTitle bgcolor="#0B1A28" color="#fff">
         {!currentHolidayPlanner
           ? 'Create a new Holiday Planner'
           : `Edit ${currentHolidayPlanner.title}`}
       </DialogTitle>
-      <DialogContent>
+      <DialogContent sx={{ backgroundColor: '#222A30', color: '#fff' }}>
         <Box component="form" onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item sm={12}>
               <FormControl fullWidth sx={{ mt: 1 }}>
-                <InputLabel htmlFor="title">Title</InputLabel>
+                <InputLabel htmlFor="title" sx={{ color: '#fff' }}>
+                  Title
+                </InputLabel>
                 <OutlinedInput
                   id="title"
                   name="title"
-                  value={currentHolidayPlanner?.title ?? formData.title}
+                  value={formData.title}
                   onChange={handleChange}
                   label="Title"
+                  sx={{ color: '#fff' }}
                 />
               </FormControl>
             </Grid>
             <Grid item sm={12}>
               <FormControl fullWidth>
-                <InputLabel htmlFor="description">Description</InputLabel>
+                <InputLabel htmlFor="description" sx={{ color: '#fff' }}>
+                  Description
+                </InputLabel>
                 <OutlinedInput
                   fullWidth
                   id="description"
                   name="description"
-                  value={
-                    currentHolidayPlanner?.description ?? formData.description
-                  }
+                  value={formData.description}
                   onChange={handleChange}
                   label="Description"
                   multiline
                   rows={3}
+                  sx={{ color: '#fff' }}
                 />
               </FormControl>
             </Grid>
             <Grid item sm={4}>
               <FormControl fullWidth>
-                <InputLabel htmlFor="startDate">Start Date</InputLabel>
+                <InputLabel htmlFor="startDate" sx={{ color: '#fff' }}>
+                  Start Date
+                </InputLabel>
                 <OutlinedInput
                   id="startDate"
                   name="startDate"
                   type="date"
-                  value={currentHolidayPlanner?.startDate ?? formData.startDate}
+                  value={formData.startDate}
                   onChange={handleChange}
                   label="Start Date"
                   sx={{
                     padding: '16.5px 14px 16.5px 94px',
+                    color: '#fff',
                     '& input': { padding: 0 },
                   }}
                 />
@@ -182,15 +190,18 @@ const HolidayPlannerFormModal: React.FC<IHolidayPlannerFormModalProps> = ({
             </Grid>
             <Grid item sm={4}>
               <FormControl fullWidth>
-                <InputLabel htmlFor="endDate">End Date</InputLabel>
+                <InputLabel htmlFor="endDate" sx={{ color: '#fff' }}>
+                  End Date
+                </InputLabel>
                 <OutlinedInput
                   id="endDate"
                   name="endDate"
                   type="date"
-                  value={currentHolidayPlanner?.endDate ?? formData.endDate}
+                  value={formData.endDate}
                   onChange={handleChange}
                   label="End Date"
                   sx={{
+                    color: '#fff',
                     padding: '16.5px 14px 16.5px 94px',
                     '& input': { padding: 0 },
                   }}
@@ -199,13 +210,16 @@ const HolidayPlannerFormModal: React.FC<IHolidayPlannerFormModalProps> = ({
             </Grid>
             <Grid item sm={4}>
               <FormControl fullWidth>
-                <InputLabel htmlFor="location">Location</InputLabel>
+                <InputLabel htmlFor="location" sx={{ color: '#fff' }}>
+                  Location
+                </InputLabel>
                 <OutlinedInput
                   id="location"
                   name="location"
-                  value={currentHolidayPlanner?.location ?? formData.location}
+                  value={formData.location}
                   onChange={handleChange}
                   label="Location"
+                  sx={{ color: '#fff' }}
                 />
               </FormControl>
             </Grid>
@@ -222,6 +236,7 @@ const HolidayPlannerFormModal: React.FC<IHolidayPlannerFormModalProps> = ({
                     value={participant}
                     onChange={(e) => handleChange(e, index)}
                     fullWidth
+                    sx={{ color: '#fff' }}
                   />
                 </FormControl>
                 {formData.participants.length > 1 && (
@@ -229,21 +244,29 @@ const HolidayPlannerFormModal: React.FC<IHolidayPlannerFormModalProps> = ({
                     onClick={() => handleRemoveParticipant(index)}
                     sx={{ ml: 1 }}
                   >
-                    -
+                    <CiCircleMinus color="red" />
                   </IconButton>
                 )}
               </Box>
             ))}
-            <IconButton onClick={handleAddParticipant} sx={{ m: 1 }}>
-              +
-            </IconButton>
+            <Box display="flex" alignItems="center">
+              <IconButton
+                onClick={handleAddParticipant}
+                sx={{ m: 1, color: '#1976D2' }}
+              >
+                <CiCirclePlus />
+              </IconButton>
+              <Typography>Add new participant</Typography>
+            </Box>
           </Grid>
-          <Button onClick={onHideModal} color="primary">
-            Cancel
-          </Button>
-          <Button type="submit" color="primary">
-            {currentHolidayPlanner ? 'Update' : 'Create'}
-          </Button>
+          <Box display="flex" width="100%" justifyContent="space-between">
+            <Button onClick={onHideModal} color="primary" variant="outlined">
+              Cancel
+            </Button>
+            <Button type="submit" color="success" variant="outlined">
+              {currentHolidayPlanner ? 'Update' : 'Create'}
+            </Button>
+          </Box>
         </Box>
       </DialogContent>
     </Dialog>

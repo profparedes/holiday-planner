@@ -3,19 +3,20 @@ import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import {
   Box,
   Button,
-  Card,
-  CardContent,
   Container,
+  Dialog,
+  DialogContent,
+  DialogTitle,
   Grid,
-  Modal,
-  Paper,
   Typography,
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { LuCalendarPlus } from 'react-icons/lu'
 import { useHolidayPlanner } from 'stores/HolidayContext'
+import { getPrintableContent } from 'utils/pdf'
 
 import Header from 'components/Header'
+import HolidayCard from 'components/HolidayCard'
 import HolidayPlannerFormModal from 'components/HolidayPlannerFormModal'
 import { FormDataType } from 'components/HolidayPlannerFormModal/HolidayPlannerFormModal'
 
@@ -87,6 +88,17 @@ const Home: React.FC = () => {
     }
   }, [currentHolidayPlanner, deleteHolidayPlanner])
 
+  const handlePrintPlanner = useCallback(
+    (holidayPlanner: HolidayPlannerType) => {
+      const printableContent = getPrintableContent(holidayPlanner)
+      const originalContent = document.body.innerHTML
+      document.body.innerHTML = printableContent
+      window.print()
+      document.body.innerHTML = originalContent
+    },
+    [],
+  )
+
   const initialFormData = useMemo(
     () =>
       !currentHolidayPlanner
@@ -99,7 +111,7 @@ const Home: React.FC = () => {
             participants: [''],
           }
         : {
-            title: currentHolidayPlanner.title || 'PPPP',
+            title: currentHolidayPlanner.title || '',
             description: currentHolidayPlanner.description || '',
             startDate: currentHolidayPlanner.startDate || '',
             endDate: currentHolidayPlanner.endDate || '',
@@ -122,59 +134,44 @@ const Home: React.FC = () => {
           startIcon={<LuCalendarPlus style={{ marginRight: '8px' }} />}
           onClick={handleOpenCreateModal}
         >
-          {/* Material UI's Button and startIcon */}
           Create a new Holiday Planner
         </Button>
       </Header>
       {/* <LanguageSwitcher /> */}
-      <main className="flex-grow-1">
+      <Box
+        display="flex"
+        flexDirection="column"
+        minHeight="100vh"
+        flexGrow={1}
+        bgcolor="#0F1418"
+      >
         <Container maxWidth="lg">
           {isLoading && <p>Loading...</p>}
           <Grid container spacing={2} style={{ marginTop: 12 }}>
             {!isLoading &&
               holidayPlanners.length > 0 &&
               holidayPlanners.map((item) => (
-                <Grid key={item.id} item xs={12} sm={6} md={4}>
-                  <Card>
-                    <CardContent>
-                      <Typography variant="h5">{item.title}</Typography>{' '}
-                      <Typography variant="body2">
-                        {item.description}
-                      </Typography>
-                      <Box display="flex" alignItems="center">
-                        <Box flexGrow={1}>
-                          <Typography variant="body2">
-                            {item.startDate}
-                          </Typography>
-                        </Box>
-                        <Box flexGrow={1}>
-                          <Typography variant="body2">
-                            {item.endDate}
-                          </Typography>
-                        </Box>
-                        <Typography variant="body2">
-                          {item.participants.join(', ')}
-                        </Typography>
-                      </Box>
-                      <Box display="flex" justifyContent="space-between" mt={2}>
-                        <Button onClick={() => handleEditHolidayPlanner(item)}>
-                          Edit
-                        </Button>
-                        <Button
-                          onClick={() =>
-                            handleOpenDeleteHolidayPlannerModal(item)
-                          }
-                        >
-                          Delete
-                        </Button>
-                      </Box>
-                    </CardContent>
-                  </Card>
+                <Grid
+                  key={item.id}
+                  item
+                  xs={12}
+                  sm={12}
+                  md={6}
+                  lg={4}
+                  flexGrow={1}
+                  minHeight="100%"
+                >
+                  <HolidayCard
+                    holidayPlanner={item}
+                    onEdit={() => handleEditHolidayPlanner(item)}
+                    onDelete={() => handleOpenDeleteHolidayPlannerModal(item)}
+                    onPrint={() => handlePrintPlanner(item)}
+                  />
                 </Grid>
               ))}
           </Grid>
         </Container>
-      </main>
+      </Box>
 
       <HolidayPlannerFormModal
         showModal={modalShow}
@@ -184,35 +181,35 @@ const Home: React.FC = () => {
         initialFormData={initialFormData}
       />
 
-      <Modal
+      <Dialog
         open={deleteConfirmModal}
         onClose={() => setDeleteConfirmModal(false)}
-        aria-labelledby="delete-holiday-planner-modal-title"
       >
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-          }}
-        >
-          <Paper sx={{ maxWidth: 'md' }}>
-            <Typography variant="h6" id="delete-holiday-planner-modal-title">
-              Delete Holiday Planner
-            </Typography>
-            <Typography variant="body1">
-              Are you sure you want to delete the holiday planner:{' '}
-              {currentHolidayPlanner?.title}
-            </Typography>
-            <Box display="flex" justifyContent="flex-end" mt={2}>
-              <Button onClick={() => setDeleteConfirmModal(false)}>
-                Cancel
-              </Button>
-              <Button onClick={handleDeleteHolidayPlanner}>Delete</Button>
-            </Box>
-          </Paper>
-        </Box>
-      </Modal>
+        <DialogTitle bgcolor="#0B1A28" color="#fff">
+          <Typography variant="h6">Delete Holiday Planner</Typography>
+        </DialogTitle>
+        <DialogContent sx={{ backgroundColor: '#222A30', color: '#fff' }}>
+          <Typography mt={2} textAlign="center">
+            Are you sure you want to delete the holiday planner:{' '}
+            {currentHolidayPlanner?.title}
+          </Typography>
+          <Box display="flex" justifyContent="space-between" mt={2}>
+            <Button
+              variant="outlined"
+              onClick={() => setDeleteConfirmModal(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={handleDeleteHolidayPlanner}
+            >
+              Delete
+            </Button>
+          </Box>
+        </DialogContent>
+      </Dialog>
     </>
   )
 }
