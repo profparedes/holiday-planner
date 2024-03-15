@@ -1,6 +1,13 @@
-# React 18, Vite 5, Typescript 5, Vitest 1, Eslint 8, Prettier 3, EditorConfig
+# Holiday Planner
 
-A starter for React with Typescript with the blazing fast Vite, strong Vitest framework and all static code testing with Eslint and formatting with Prettier and EditorConfig.
+Holiday Planner is a web application that helps you manage events and holidays. You can create, edit, delete, and view events, as well as print information about them. The application is responsive and can be used on any device.
+
+## Technologies
+
+- React
+- TypeScript
+- Material UI
+- Node.js
 
 ## Requirements
 
@@ -8,91 +15,54 @@ A starter for React with Typescript with the blazing fast Vite, strong Vitest fr
 
 ## Installation & run
 
-1. Install [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) and [EditorConfig](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig) extensions for VS Code. **Do not install the Prettier extension** (Prettier will be managed by ESLint)
+1. Clone the project from GitHub:
+```
+git clone https://github.com/profparedes/holiday-planner.git
+```
 
-2. Clone the repo and run:
+2. Copy the environment file:
 
 ```
 cp .env.example .env
 ```
-
+3. Install dependencies:
 ```
 yarn
 ```
-
+4. Start the API:
 ```
-yarn dev
+yarn start:api
 ```
-
-## Test
-
+5. Start the application:
 ```
-yarn test
+yarn start:api
 ```
 
-To see on Vitest UI
+## Features
 
-```
-yarn test --ui
-```
+- **Create**: Create new events with title, description, start date, end date, location, and participants. You can add new participants to the event.
 
-To run with coverage reports (the results will output to `/coverage/index.html`)
+- **Read**: Events are displayed in a card format on the main screen of the application, in a responsive manner.
 
-```
-yarn coverage
-```
+- **Update**: Events can be updated in any field, including removing participants.
 
-## Troubleshooting
+- **Delete**: Events can be deleted, with a confirmation modal before deletion.
 
-Error:
-
-```
-Cannot find module 'node:path'
-```
-
-Solution: Use Node.js v18
+- **Printing**: You can print information about any event by clicking the "Print" button on the event card.
 
 ---
 
-Error:
+## Notes
 
-```
-Command failed: node /path/to/project/node_modules/esbuild/bin/esbuild --version dyld: Symbol not found: \_SecTrustEvaluateWithError
-```
+- This application utilizes an internal API for CRUD operations.
+- The application code is available on GitHub: https://github.com/profparedes/holiday-planner.git
 
-Solution:
+### Contributing:
 
-1. Stop using `npm` or `yarn` for this project
-2. Install [pnpm](https://pnpm.io)
-3. Remove `node_modules`
-4. Remove `yarn.lock` (if exists)
-5. Remove `package-lock.json` (if exists)
-6. Add the following to `package.json`
+Feel free to contribute to the project! Fork the repository on GitHub and submit your pull requests.
 
-```
-"devDependencies": {
-    // ... other dependencies
-    "esbuild-wasm":"latest",
-},
-"pnpm": {
-    "overrides": {
-        "esbuild":"npm:esbuild-wasm@latest"
-    }
-},
-```
+### Support:
 
-Download the dependencies:
+If you encounter any issues with the application, please open an issue on GitHub: https://support.google.com/webmasters/thread/176251023/outdated-content-removal-invalid-url?hl=en
 
-```
-pnpm i
-```
-
-Run the project:
-
-```
-pnpm run dev
-```
-
-## Credits
-
-This is a fork of [https://github.com/TheSwordBreaker/vite-reactts-eslint-prettier](https://github.com/TheSwordBreaker/vite-reactts-eslint-prettier)
+*Thank you for using Holiday Planner!*
